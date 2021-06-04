@@ -1,4 +1,5 @@
 class Piece {
+  
   int none = 0;
   int king = 1;
   int queen = 2;
@@ -9,39 +10,31 @@ class Piece {
   
   int white = 8;
   int black = 16;
-
+  
+  int whiteMask = 0b01000;    //checks if white with bitwise and operator
+  int blackMask = 0b10000;    //checks if black with bitwise and operator
+  
+  int colorMask = whiteMask | blackMask;    //returns the color when used with bitwise and operator
+  
+  int pieceMask = 0b00111;          //returns the piece when used with bitwise and operator
   
   
   void identifyPieces(int file, int rank, int[] arr){
     
-    int code = arr[file + 8*rank];
+    int pieceCode = arr[file + 8*rank];
     
     if (!board.isSquareEmpty(file, rank)){
-      
-      if (isPawn(code)){
-        drawPiece(getColor(code), 5, file, rank);
-      }
-      else if (isKnight(code)){
-        drawPiece(getColor(code), 3, file, rank);
-      }
-      else if (isBishop(code)){
-        drawPiece(getColor(code), 2, file, rank);
-      }
-      else if (isRook(code)){
-        drawPiece(getColor(code), 4, file, rank);
-      }
-      else if (isQueen(code)){
-        drawPiece(getColor(code), 1, file, rank);
-      }
-      else if (isKing(code)){
-        drawPiece(getColor(code), 0, file, rank);
-      }
+      drawPiece(getColor(pieceCode), pieceCode, file, rank); 
+
     }
   }
   
   void drawPiece(int colour, int piece, int file, int rank){
     PVector position = new PVector(file*l, h - (rank*l + l));
-    image(piecesImageArray[colour][piece], position.x, position.y);
+    int colourIndexInJason = json.getJasonColorIndex(colour);
+    int pieceIndexInJason = json.getJasonPieceIndex(piece);
+    
+    image(piecesImageArray[colourIndexInJason][pieceIndexInJason], position.x, position.y);
     
   }
   
@@ -72,8 +65,6 @@ class Piece {
   }
   
   int getColor(int a){
-    return (a>>4);
-  }
-  
-  
+    return (a & colorMask);
+  } 
 }

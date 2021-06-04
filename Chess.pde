@@ -6,18 +6,13 @@ int l = h/8;
 PImage spritesheet;
 JSONObject spritedata;
 PImage[][] piecesImageArray;
-Board board;
-Fen fen;
+
 
 IntDict piecesFromSymbol;
 
 
 void setup(){
   size(600, 600);
-  
-  createChessBoard();
-  board = new Board();
-  fen = new Fen();
   
   //creating sprite array
   
@@ -49,7 +44,6 @@ void setup(){
   piecesFromSymbol.set("p", piece.black | piece.pawn);  piecesFromSymbol.set("P", piece.white | piece.pawn);
   
   
-  fen.loadFen(fen.startFen);
   
 }
 
@@ -58,13 +52,17 @@ void setup(){
   
 
 void draw(){
+  drawChessBoard();
+  fen.loadFen();
+
   board.readBoard(board.squareInfo);
+
   
 }
 
 // Creating chessboard----------------------------------------------
 
-void createChessBoard(){
+void drawChessBoard(){
   for (int file = 0; file < 8; file++){
     for (int rank = 0; rank < 8; rank++){
       boolean isLightSquare = (file + rank) % 2 != 0;
