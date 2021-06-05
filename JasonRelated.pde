@@ -1,7 +1,7 @@
 class Json{
   
   int getJasonPieceIndex(int pieceCode) {
-    switch(pieceCode & piece.pieceMask) {
+    switch(pieceCode & pieceInfo.pieceMask) {
       case 1:      //King
         return(0);
       case 2:      //Queen

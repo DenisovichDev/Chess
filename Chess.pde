@@ -7,6 +7,9 @@ PImage spritesheet;
 JSONObject spritedata;
 PImage[][] piecesImageArray;
 
+ArrayList<Piece> pieces = new ArrayList<Piece>();
+ArrayList<Integer> arrr = new ArrayList<Integer>();
+ 
 
 IntDict piecesFromSymbol;
 
@@ -17,12 +20,12 @@ void setup(){
   //creating sprite array
   
   piecesImageArray = new PImage[2][6];
-  spritedata = loadJSONObject("sprites/pieces.json");
+  spritedata = loadJSONObject("sprites/piecesSprite.json");
   spritesheet = loadImage("sprites/pieces.png");
-  JSONArray pieces = spritedata.getJSONArray("pieces");
+  JSONArray piecesPosition = spritedata.getJSONArray("pieces");
   for (int j = 0; j < 2; j++){          //j = 0: white; j = 1: black
     for (int i = 0; i < 6; i++){
-      JSONObject piece = pieces.getJSONObject(i + j*6);
+      JSONObject piece = piecesPosition.getJSONObject(i + j*6);
       JSONObject pos = piece.getJSONObject("position");
       int x = pos.getInt("x");
       int y = pos.getInt("y");
@@ -36,28 +39,33 @@ void setup(){
   
   
   piecesFromSymbol = new IntDict();
-  piecesFromSymbol.set("k", piece.black | piece.king);  piecesFromSymbol.set("K", piece.white | piece.king);
-  piecesFromSymbol.set("q", piece.black | piece.queen); piecesFromSymbol.set("Q", piece.white | piece.queen);
-  piecesFromSymbol.set("b", piece.black | piece.bishop);piecesFromSymbol.set("B", piece.white | piece.bishop);
-  piecesFromSymbol.set("n", piece.black | piece.knight);piecesFromSymbol.set("N", piece.white | piece.knight);
-  piecesFromSymbol.set("r", piece.black | piece.rook);  piecesFromSymbol.set("R", piece.white | piece.rook);
-  piecesFromSymbol.set("p", piece.black | piece.pawn);  piecesFromSymbol.set("P", piece.white | piece.pawn);
+  piecesFromSymbol.set("k", pieceInfo.black | pieceInfo.king);  piecesFromSymbol.set("K", pieceInfo.white | pieceInfo.king);
+  piecesFromSymbol.set("q", pieceInfo.black | pieceInfo.queen); piecesFromSymbol.set("Q", pieceInfo.white | pieceInfo.queen);
+  piecesFromSymbol.set("b", pieceInfo.black | pieceInfo.bishop);piecesFromSymbol.set("B", pieceInfo.white | pieceInfo.bishop);
+  piecesFromSymbol.set("n", pieceInfo.black | pieceInfo.knight);piecesFromSymbol.set("N", pieceInfo.white | pieceInfo.knight);
+  piecesFromSymbol.set("r", pieceInfo.black | pieceInfo.rook);  piecesFromSymbol.set("R", pieceInfo.white | pieceInfo.rook);
+  piecesFromSymbol.set("p", pieceInfo.black | pieceInfo.pawn);  piecesFromSymbol.set("P", pieceInfo.white | pieceInfo.pawn);
   
-  
+  // PieceArray
+  fen.loadFen();
+  for (int file = 0; file < 8; file++){
+    for (int rank = 0; rank < 8; rank++){
+      if (board.squareInfo[file + rank*8] != 0){
+        pieces.add(new Piece(file, rank));
+      }
+    }
+  }
   
 }
 
 
-  
-  
-
 void draw(){
   drawChessBoard();
   fen.loadFen();
-
+  arrr.clear();
   board.readBoard(board.squareInfo);
 
-  
+  println(arrr.size());
 }
 
 // Creating chessboard----------------------------------------------
